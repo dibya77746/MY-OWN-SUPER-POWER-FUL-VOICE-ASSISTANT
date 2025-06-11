@@ -1,0 +1,89 @@
+import speech_recognition as sr
+import pyttsx3
+import webbrowser
+import datetime
+
+engine = pyttsx3.init()
+
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def listen():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        audio = r.listen(source)
+    try:
+        command = r.recognize_google(audio).lower()
+        print(f"You said: {command}")
+        return command
+    except sr.UnknownValueError:
+        speak("Sorry, I did not understand.")
+        return ""
+    except sr.RequestError:
+        speak("Sorry, my speech service is down.")
+        return ""
+
+def main():
+    speak("Hello! How can I help you?")
+    while True:
+        command = listen()
+        if "youtube" in command:
+            speak("Opening YouTube")
+            webbrowser.open("https://www.youtube.com")
+        elif "weather" in command:
+            speak("Sorry, I can't fetch the weather right now.")
+        elif "joke" in command:
+            joke = get_joke()
+            speak(joke)
+        elif "calculator" in command:
+            speak("Opening calculator")
+            webbrowser.open("https://www.calculator.com")
+        elif "temperature" in command:
+            temp = get_temperature()
+            speak(temp)
+        elif "news" in command:
+            speak("Opening news")
+            webbrowser.open("https://www.bbc.com/news")
+        elif "open" in command and "youtube" in command:
+            speak("Opening YouTube")
+            webbrowser.open("https://www.youtube.com")
+        elif "open" in command and "google" in command:
+            speak("Opening Google")
+            webbrowser.open("https://www.google.com")
+        elif "google" in command:
+            speak("Opening Google")
+            webbrowser.open("https://www.google.com")
+        elif "linkedin" in command:
+            speak("Opening LinkedIn")
+            webbrowser.open("https://www.linkedin.com")
+        elif "github" in command:
+            speak("Opening GitHub")
+            webbrowser.open("https://www.github.com")
+        elif "open" in command and "calculator" in command:
+            speak("Opening calculator")
+            webbrowser.open("https://www.calculator.com")
+        elif"open" in command and  "music" in command:
+            speak("Opening music")
+            webbrowser.open("https://www.spotify.com")
+        elif "open" in command and "whatsapp" in command:
+            speak("Opening WhatsApp")
+            webbrowser.open("https://web.whatsapp.com")
+        elif "date" in command or "time" in command:
+            now = datetime.datetime.now()
+            speak(f"The current date and time is {now.strftime('%Y-%m-%d %H:%M')}")
+        elif "tell me a joke" in command:
+            joke = get_joke()
+            speak(joke)
+        elif "stop" in command or "exit" in command:
+            
+            speak("Goodbye!")
+            
+            
+            break
+        elif command:
+            speak("Sorry, I can't do that yet.")
+
+if __name__ == "__main__":
+    main()
